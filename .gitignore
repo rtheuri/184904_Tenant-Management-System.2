@@ -1,15 +1,28 @@
 *.iml
 .gradle
 /local.properties
+local.properties
+
+# Secrets, keystores and signing keys
+*.jks
+*.keystore
+signing/
+release-keystore.properties
+
+# Android Studio / IntelliJ IDEA
 /.idea/caches
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+
+# System & Build
 .DS_Store
 /build
+build/
 /captures
 .externalNativeBuild
 .cxx
-local.properties
+*.apk
+*.aab
