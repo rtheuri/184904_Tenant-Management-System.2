@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.example.tenantmanagementsystem2.data.model.Tenant
+import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import kotlinx.coroutines.launch
 
 class TenantViewModel(application: Application) : AndroidViewModel(application) {

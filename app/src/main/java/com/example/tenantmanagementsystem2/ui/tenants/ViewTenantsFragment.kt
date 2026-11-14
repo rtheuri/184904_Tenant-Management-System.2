@@ -1,4 +1,4 @@
-package com.example.tenantmanagementsystem2
+package com.example.tenantmanagementsystem2.ui.tenants
 
 import android.content.Intent
 import android.net.Uri
@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.tenantmanagementsystem2.databinding.FragmentViewTenantsBinding
+import com.example.tenantmanagementsystem2.ui.viewmodel.TenantViewModel
 
 class ViewTenantsFragment : Fragment() {
     private var _binding: FragmentViewTenantsBinding? = null
@@ -46,9 +47,9 @@ class ViewTenantsFragment : Fragment() {
             }
         }
 
-        // Observe the reactive tenant list from the ViewModel (backed by Room now)
-        viewModel.formattedTenantList.observe(viewLifecycleOwner) { formatted ->
-            binding.allTenantsTextView.text = formatted
+        // Observe the ViewModel: the screen updates whenever the tenant list changes
+        viewModel.formattedTenantList.observe(viewLifecycleOwner) { text ->
+            binding.allTenantsTextView.text = text
         }
     }
 
