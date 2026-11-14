@@ -11,13 +11,15 @@ import androidx.navigation.fragment.navArgs
 import com.example.tenantmanagementsystem2.data.model.Tenant
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import com.example.tenantmanagementsystem2.databinding.FragmentViewTenantsBinding
-
+import androidx.fragment.app.activityViewModels
 class ViewTenantsFragment : Fragment() {
     private var _binding: FragmentViewTenantsBinding? = null
     private val binding get() = _binding!!
 
     // SAFE ARGS: reads the arguments that arrived with the action
     private val args: ViewTenantsFragmentArgs by navArgs()
+
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

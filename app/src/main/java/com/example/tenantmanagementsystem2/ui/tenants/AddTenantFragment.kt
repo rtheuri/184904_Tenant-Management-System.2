@@ -10,10 +10,12 @@ import androidx.navigation.fragment.findNavController
 import com.example.tenantmanagementsystem2.data.model.Tenant
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import com.example.tenantmanagementsystem2.databinding.FragmentAddTenantBinding
-
+import androidx.fragment.app.activityViewModels
 class AddTenantFragment : Fragment() {
     private var _binding: FragmentAddTenantBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

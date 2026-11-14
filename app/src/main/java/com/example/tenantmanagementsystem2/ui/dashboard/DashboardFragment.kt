@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import com.example.tenantmanagementsystem2.databinding.FragmentDashboardBinding
+import androidx.fragment.app.activityViewModels
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: TenantViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("TENANT_LIFECYCLE", " DashboardFragment: onCreate")
@@ -31,11 +33,10 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("TENANT_LIFECYCLE", " DashboardFragment: onViewCreated")
 
-        val tenantCount = TenantRepository.tenants.size
-        val totalRent = TenantRepository.totalRent()
-
-        binding.tenantCountTextView.text = "Tenants\n$tenantCount"
-        binding.totalRentTextView.text = "Total rent\nKSh %,.0f".format(totalRent)
+        // DATA BINDING: give the ViewModel to the layout
+        binding.viewModel = viewModel
+// Lets the layout WATCH LiveData
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.addTenantButton.setOnClickListener {
             val action = DashboardFragmentDirections.actionDashboardFragmentToAddTenantFragment()
