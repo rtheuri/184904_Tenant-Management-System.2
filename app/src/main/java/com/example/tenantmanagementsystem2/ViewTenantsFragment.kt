@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.tenantmanagementsystem2.databinding.FragmentViewTenantsBinding
 
@@ -16,6 +17,8 @@ class ViewTenantsFragment : Fragment() {
 
     // SAFE ARGS: reads the arguments that arrived with the action
     private val args: ViewTenantsFragmentArgs by navArgs()
+
+    private val viewModel: TenantViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -29,11 +32,8 @@ class ViewTenantsFragment : Fragment() {
 
         // The tenant sent from Add Tenant, or null if we came from the Dashboard
         val newTenant = args.newTenant
-
-        // Data Binding: give it to the layout variable so it updates itself
         binding.tenant = newTenant
 
-        // Hide the "Just added" section if no tenant was passed
         if (newTenant == null) {
             binding.newTenantGroup.visibility = View.GONE
         }
@@ -46,12 +46,9 @@ class ViewTenantsFragment : Fragment() {
             }
         }
 
-        // Show all saved tenants
-        val tenants = TenantRepository.tenants
-        if (tenants.isEmpty()) {
-            binding.allTenantsTextView.text = "No tenants yet. Add one from the Dashboard."
-        } else {
-            binding.allTenantsTextView.text = tenants.joinToString("\n\n") { it.summary() }
+        // Observe the reactive tenant list from the ViewModel (backed by Room now)
+        viewModel.formattedTenantList.observe(viewLifecycleOwner) { formatted ->
+            binding.allTenantsTextView.text = formatted
         }
     }
 
