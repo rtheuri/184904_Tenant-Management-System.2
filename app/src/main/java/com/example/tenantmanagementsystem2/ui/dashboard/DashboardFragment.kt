@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import com.example.tenantmanagementsystem2.databinding.FragmentDashboardBinding
 import androidx.fragment.app.activityViewModels
+import com.example.tenantmanagementsystem2.ui.viewmodel.TenantViewModel
 
 class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null

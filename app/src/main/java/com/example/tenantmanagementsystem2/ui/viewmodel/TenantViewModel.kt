@@ -1,9 +1,11 @@
-package com.example.tenantmanagementsystem2
+package com.example.tenantmanagementsystem2.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.example.tenantmanagementsystem2.data.model.Tenant
+import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 
 class TenantViewModel : ViewModel() {
 

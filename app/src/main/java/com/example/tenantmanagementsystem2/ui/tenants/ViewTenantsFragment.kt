@@ -12,6 +12,7 @@ import com.example.tenantmanagementsystem2.data.model.Tenant
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
 import com.example.tenantmanagementsystem2.databinding.FragmentViewTenantsBinding
 import androidx.fragment.app.activityViewModels
+import com.example.tenantmanagementsystem2.ui.viewmodel.TenantViewModel
 class ViewTenantsFragment : Fragment() {
     private var _binding: FragmentViewTenantsBinding? = null
     private val binding get() = _binding!!
