@@ -1,26 +1,35 @@
 package com.example.tenantmanagementsystem2.ui.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
+import com.example.tenantmanagementsystem2.data.local.TenantDatabase
 import com.example.tenantmanagementsystem2.data.model.Tenant
 import com.example.tenantmanagementsystem2.data.repository.TenantRepository
+import kotlinx.coroutines.launch
 
-class TenantViewModel : ViewModel() {
+class TenantViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _tenants = MutableLiveData<List<Tenant>>(TenantRepository.tenants)
-    val tenants: LiveData<List<Tenant>> get() = _tenants
+    private val repository: TenantRepository
+    val tenants: LiveData<List<Tenant>>
 
-    val totalRent: LiveData<Double> = _tenants.map { tenantList ->
-        tenantList.sumOf { it.rent.toDoubleOrNull() ?: 0.0 }
+    init {
+        val dao = TenantDatabase.getDatabase(application).tenantDao()
+        repository = TenantRepository(dao)
+        tenants = repository.tenants
     }
 
-    val formattedTenantList: LiveData<String> = _tenants.map { tenantList ->
-        if (tenantList.isEmpty()) {
+    val totalRent: LiveData<Double> = tenants.map { list ->
+        list.sumOf { it.rent.toDoubleOrNull() ?: 0.0 }
+    }
+
+    val formattedTenantList: LiveData<String> = tenants.map { list ->
+        if (list.isEmpty()) {
             "No tenants yet. Add one from the Dashboard."
         } else {
-            tenantList.joinToString("\n\n") { it.summary() }
+            list.joinToString("\n\n") { it.summary() }
         }
     }
 
@@ -28,9 +37,9 @@ class TenantViewModel : ViewModel() {
         if (name.isBlank() || phone.isBlank() || rent.isBlank()) {
             return false
         }
-        val tenant = Tenant(name.trim(), phone.trim(), rent.trim())
-        TenantRepository.addTenant(tenant)
-        _tenants.value = TenantRepository.tenants.toList()
+        viewModelScope.launch {
+            repository.addTenant(Tenant(name = name.trim(), phone = phone.trim(), rent = rent.trim()))
+        }
         return true
     }
 }

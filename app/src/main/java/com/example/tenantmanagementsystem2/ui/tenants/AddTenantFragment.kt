@@ -38,7 +38,7 @@ class AddTenantFragment : Fragment() {
 
             if (saved) {
                 // Tenant is only built here to pass to the "Just added" section via Safe Args
-                val tenant = Tenant(name.trim(), phone.trim(), rent.trim())
+                val tenant = Tenant(name = name.trim(), phone = phone.trim(), rent = rent.trim())
                 val action =
                     AddTenantFragmentDirections.actionAddTenantFragmentToViewTenantsFragment(tenant)
                 findNavController().navigate(action)
