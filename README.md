@@ -4,7 +4,7 @@
 **Institution:** Strathmore University -- School of Computing and Engineering Sciences  
 **Repository:** [rtheuri/Tenant_Management-System-2](https://github.com/rtheuri/Tenant_Management-System-2)  
 **Default Branch:** `master`  
-**Current Status:** In Development -- Presentation Layer and In-Memory ViewModel Merged; Room Database and Data Integration Pending
+**Current Status:** Stages 1-5 Merged; Stage 6 (Release & Documentation) In Progress (PR #7)
 
 ---
 
@@ -15,10 +15,10 @@ The Tenant Management System is a native Android mobile application developed in
 ### Current Implementation Status
 - Stage 1 (Architecture & Folder Organization): Completed and merged into `master` ([PR #3](https://github.com/rtheuri/Tenant_Management-System-2/pull/3)).
 - Stage 2 (ViewModel & LiveData): Completed and merged into `master` ([PR #1](https://github.com/rtheuri/Tenant_Management-System-2/pull/1)).
-- Stage 3 (Room Database): Pending. No standalone Room database branch or pull request has been merged into `master`.
+- Stage 3 (Room Database): Completed and merged into `master` ([PR #6](https://github.com/rtheuri/Tenant_Management-System-2/pull/6)).
 - Stage 4 & 4B (Screens Integration): Completed and merged into `master` ([PR #2](https://github.com/rtheuri/Tenant_Management-System-2/pull/2) and [PR #4](https://github.com/rtheuri/Tenant_Management-System-2/pull/4)).
-- Stage 5 (Data Integration): Pending. Initial persistence implementation exists on an unmerged remote feature branch (`feature/data-integration`), but has not been merged into `master`.
-- Stage 6 (Release and Documentation): Pending. Scheduled following the completion and merge of Stage 5.
+- Stage 5 (Data Integration): Completed and merged into `master` ([PR #5](https://github.com/rtheuri/Tenant_Management-System-2/pull/5)).
+- Stage 6 (Release and Documentation): In progress (Pull Request #7 open, awaiting review and release build).
 
 ---
 
@@ -29,7 +29,7 @@ The Tenant Management System provides landlords with a mobile application to mai
 The application is structured following modern Android development practices, emphasizing clean separation between user interface components and data management logic, lifecycle-aware state preservation, and collaborative Git workflow across modular feature branches.
 
 > **Technical Notice on Current Authentication and Storage:**  
-> The registration and login interfaces demonstrate client-side input validation, intent navigation, and user session information passing via Intent extras. They do not connect to a remote authentication server or provide encrypted credential storage. Furthermore, all tenant records are currently held in a temporary in-memory list within the application process; permanent data storage requires the completion of the Room database integration.
+> The registration and login interfaces demonstrate client-side input validation, intent navigation, and user session information passing via Intent extras. They do not connect to a remote authentication server or provide encrypted credential storage. Tenant records are permanently persisted in an embedded SQLite database using Android Room.
 
 ---
 
@@ -43,13 +43,13 @@ Manual tracking of tenants using paper files or generic spreadsheets often cause
 4. **Tenant Communication Integration:** Integrate one-touch phone dialer actions using Android Implicit Intents (`Intent.ACTION_DIAL`) to call tenants directly.
 5. **Architectural Separation of Concerns:** Enforce a layered architecture where presentation logic observes data without directly managing data persistence.
 6. **Configuration State Preservation:** Preserve active screen data during device configuration changes (such as device rotation) using Jetpack ViewModels.
-7. **Local Offline Persistence (Planned):** Implement an embedded SQLite database using Android Room to persist records across application restarts.
+7. **Local Offline Persistence:** Persist tenant records across application restarts using an embedded SQLite database managed by Android Room.
 
 ---
 
 ## 4. Implemented and Pending Features
 
-### Implemented Features (Verified on Default Branch `master`)
+### Implemented Features (Verified on `master` and `release/v1.0`)
 - **Authentication Screens:**
   - `RegisterActivity`: Collects full name, email, and password; validates that all fields are non-empty; passes email to login via explicit intent.
   - `LoginActivity`: Validates credentials; passes user email to `MainActivity`; provides an implicit intent link opening Strathmore University web resources.
@@ -68,20 +68,17 @@ Manual tracking of tenants using paper files or generic spreadsheets often cause
   - Highlight card displaying the most recently added tenant summary.
   - One-touch "CALL TENANT" button launching the device phone dialer with pre-filled phone details.
   - Dynamic LiveData observer displaying all registered tenants.
-- **State Management:**
-  - `TenantViewModel` scoped to `MainActivity` via `by activityViewModels()`, maintaining UI state across screen rotations.
+- **State Management & Persistence (Stages 2, 3 & 5):**
+  - `TenantViewModel`: Extends `AndroidViewModel`, preserves UI state across screen rotation, and launches coroutines for asynchronous database writes.
+  - Room Database: Configured via `TenantDatabase` singleton with `@Entity(tableName = "tenants")` and `TenantDao`.
+  - Repository Pattern: `TenantRepository` delegates calls directly to `TenantDao`.
+  - Permanent persistence: Tenant records survive application restarts and process terminations.
 
-### Pending Features (Awaiting Stage 3 & Stage 5 Integration)
-- **Room Database Setup (Stage 3):**
-  - Inclusion of Google KSP plugin and Room database dependencies in `build.gradle.kts`.
-  - Room table definition via `@Entity` and `@PrimaryKey` on the `Tenant` model.
-  - Data Access Object (`TenantDao.kt`) with `@Insert` and `@Query` functions in `data/local`.
-  - Abstract Room database definition (`TenantDatabase.kt`) in `data/local`.
-- **Data Integration & Persistence (Stage 5):**
-  - Migration of `TenantRepository.kt` from an in-memory `mutableListOf<Tenant>` to Room DAO operations.
-  - Transition of `TenantViewModel.kt` to an `AndroidViewModel` utilizing Kotlin Coroutines (`viewModelScope.launch`) for asynchronous database operations.
-  - Permanent data persistence: currently, all tenant records reset when the application process is terminated.
-  - Initial Room and data integration work exists on the unmerged remote branch `feature/data-integration`, but has not been merged into `master`.
+### Pending Features (Stage 6 Release)
+- **Final Release Verification & Publication:**
+  - Review and approval of Pull Request #7 by Project Lead.
+  - Generation of signed release APK (`app-release.apk`) in Android Studio.
+  - Publication of GitHub Release tagged `v1.0` with the release APK attached.
 
 ---
 
@@ -100,16 +97,15 @@ The technology stack is based on the verified build configuration files (`build.
   - Google Material Components for Android (`com.google.android.material:material`): The project currently has both a version-catalog declaration (`libs.material` at `1.14.0`) and an explicit dependency declaration (`1.12.0`) in `app/build.gradle.kts`. This is a configuration inconsistency requiring cleanup in the build scripts.
   - ConstraintLayout (`2.1.4`)
   - View Binding and Data Binding (`buildFeatures { viewBinding = true; dataBinding = true }`)
-- **Jetpack Architecture Components:**
+- **Jetpack Architecture & Room Components:**
   - Navigation Component (`androidx.navigation:navigation-fragment-ktx:2.9.8`, `navigation-ui-ktx:2.9.8`)
   - Navigation Safe Args Kotlin Plugin (`2.9.8`)
   - Lifecycle ViewModel KTX (`androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7`)
   - Lifecycle LiveData KTX (`androidx.lifecycle:lifecycle-livedata-ktx:2.8.7`)
   - Activity KTX (`1.8.0`)
-- **Planned Libraries (Stages 3 & 5):**
-  - Google KSP Plugin (`com.google.devtools.ksp`)
-  - Android Room Runtime & KTX (`androidx.room:room-runtime`, `androidx.room:room-ktx`)
-  - Room Compiler (`androidx.room:room-compiler`)
+  - Google KSP Plugin (`com.google.devtools.ksp:2.3.6`)
+  - Android Room Runtime & KTX (`androidx.room:room-runtime:2.8.5`, `androidx.room:room-ktx:2.8.5`)
+  - Room Compiler (`androidx.room:room-compiler:2.8.5`)
 
 ---
 
@@ -117,17 +113,18 @@ The technology stack is based on the verified build configuration files (`build.
 
 The codebase adheres to the layered architecture introduced in Stage 1, enforcing separation of concerns between presentation and data operations. The UI layer communicates with the data layer via the ViewModel and Repository, while the data layer maintains no dependencies on UI classes.
 
-### Implemented Package Structure (`master`)
+### Implemented Package Structure (`release/v1.0`)
 
 ```text
 app/src/main/java/com/example/tenantmanagementsystem2/
 ├── data/
 │   ├── local/
-│   │   └── .gitkeep                      # Placeholder folder (Room components pending Stage 3)
+│   │   ├── TenantDao.kt                  # Room Data Access Object interface
+│   │   └── TenantDatabase.kt             # Room database configuration singleton
 │   ├── model/
-│   │   └── Tenant.kt                     # Tenant domain model (Serializable)
+│   │   └── Tenant.kt                     # Room Entity and domain model (Serializable)
 │   └── repository/
-│       └── TenantRepository.kt           # Data repository (currently managing in-memory list)
+│       └── TenantRepository.kt           # Central data repository connecting to TenantDao
 └── ui/
     ├── auth/
     │   ├── LoginActivity.kt              # Login screen and authentication handling
@@ -141,15 +138,8 @@ app/src/main/java/com/example/tenantmanagementsystem2/
     │   └── ViewTenantsFragment.kt        # Tenant roster display and dialer intent trigger
     └── viewmodel/
         ├── .gitkeep
-        └── TenantViewModel.kt            # Lifecycle-aware presentation state holder
+        └── TenantViewModel.kt            # AndroidViewModel coordinating UI state and Room
 ```
-
-### Planned Architectural Extensions
-When Stage 3 and Stage 5 are integrated, the following components will complete the data layer:
-- `data/local/TenantDao.kt`: Data Access Object defining database queries and insertions.
-- `data/local/TenantDatabase.kt`: Abstract Room database managing the SQLite instance.
-- `data/model/Tenant.kt`: Updated with Room annotations (`@Entity`, `@PrimaryKey`).
-- `data/repository/TenantRepository.kt`: Refactored to execute database transactions via `TenantDao`.
 
 ---
 
@@ -164,36 +154,14 @@ When Stage 3 and Stage 5 are integrated, the following components will complete 
 | `AddTenantFragment` | UI (`ui.tenants`) | Captures tenant input, delegates saving to `TenantViewModel`, and navigates to View Tenants with Safe Args. |
 | `ViewTenantsFragment` | UI (`ui.tenants`) | Renders newly passed tenant data, triggers phone dialer intents, and observes the tenant roster. |
 | `TenantViewModel` | UI (`ui.viewmodel`) | Holds observable UI state, formats display data, and ensures state survival across screen rotation. |
-| `TenantRepository` | Data (`data.repository`) | Single source of truth for tenant data; currently manages an in-memory list, planned to interface with Room DAO. |
-| `Tenant` | Data (`data.model`) | Domain entity representing a tenant (name, phone, rent). Implements `Serializable` for argument transfer. |
+| `TenantRepository` | Data (`data.repository`) | Single source of truth for tenant data; interfaces directly with `TenantDao`. |
+| `Tenant` | Data (`data.model`) | Room Entity (`tenants` table) and domain model representing a tenant. |
 
 ---
 
 ## 8. Data Flow
 
-### Current In-Memory Data Flow (`master`)
-Data currently resides in volatile device memory managed by the repository singleton:
-
-```text
-[User Input in AddTenantFragment]
-               |
-               v
-   viewModel.addTenant(name, phone, rent)
-               |
-               v
-   TenantRepository.addTenant(tenant) ---> Stored in mutableListOf<Tenant>()
-               |
-               v
-   ViewModel _tenants LiveData updated
-               |
-       +-------+------------------------+
-       v (Data Binding)                 v (observe LiveData)
-[DashboardFragment]              [ViewTenantsFragment]
-Updates Count & Total Rent       Renders Updated Roster String
-```
-
-### Planned Persistent Data Flow (Post Stage 5 Integration)
-Following full Room database integration, data handling will be asynchronous and disk-backed:
+The application executes an asynchronous, disk-backed data flow powered by Android Room and Kotlin Coroutines:
 
 ```text
 [AddTenantFragment]
@@ -212,8 +180,8 @@ Following full Room database integration, data handling will be asynchronous and
 [ViewTenantsFragment]
 ```
 
-> **Lifecycle-Aware State vs. Permanent Storage:**  
-> `ViewModel` and `LiveData` ensure data survives UI configuration changes (such as device rotation), but they do not persist data across application termination. Permanent storage requires the Room SQLite database to read and write records to physical device storage.
+> **Lifecycle-Aware State & Permanent Storage:**  
+> `ViewModel` and `LiveData` ensure UI state survives configuration changes (such as device rotation), while the underlying Room SQLite database ensures all tenant records persist across application restarts and process terminations.
 
 ---
 
@@ -226,17 +194,19 @@ The project group consists of exactly six members. Individual stage allocations 
 | Bradley Roche | 193711 | To be confirmed | To be confirmed | To be confirmed |
 | Robert Theuri | 184904 | To be confirmed | To be confirmed | To be confirmed |
 | Emmanuel Kipruto | 183200 | To be confirmed | To be confirmed | To be confirmed |
-| Victoria Mumbi | 186643 | Stage 6: Release & Documentation (Confirmed) | To be created after Stage 5 merge | Pending |
+| Victoria Mumbi | 186643 | Stage 6: Release & Documentation (Confirmed) | release/v1.0 | PR #7 (Awaiting Review) |
 | Aliya Farah | 191254 | To be confirmed | To be confirmed | To be confirmed |
 | Zukeina Hassan | 191628 | To be confirmed | To be confirmed | To be confirmed |
 
 ### Repository Pull Request History
-The Git history of the repository records the following merged and unmerged pull requests and branches. These account usernames represent repository activity and are not equated with individual student identities without team confirmation:
+The Git history of the repository records the following merged and active pull requests. These account usernames represent repository activity and are not equated with individual student identities without team confirmation:
 - Pull Request #1: `Add TenantViewModel` (Merged into `master`, authored by GitHub user `Alviskamau`).
 - Pull Request #2: `Connect Screens to TenantViewModel` (Merged into `master`, authored on branch by GitHub user `Aliyafarah`, merged by `rtheuri`).
 - Pull Request #3: `Resolve merge conflicts: integrate ViewModel and screens into layered architecture` (Merged into `master`, authored and merged by GitHub user `rtheuri`).
 - Pull Request #4: `Stage 4B: connect AddTenant and ViewTenants fragments to TenantViewModel` (Merged into `master`, authored and merged by GitHub user `zukena`).
-- Unmerged Remote Branch: The `feature/data-integration` branch exists on the remote repository and contains draft Room and data integration commits by GitHub user `Kippy330`, pending review and merge.
+- Pull Request #5: `Implement Room database integration for Tenant data persistence` (Merged into `master`, authored on branch `feature/data-integration` by GitHub user `Kippy330`).
+- Pull Request #6: `Add Room entity, DAO and database` (Merged into `master`, authored on branch `feature/room`).
+- Pull Request #7: `Stage 6: Release v1.0` (Active on branch `release/v1.0`, authored by `Vmumbi`, awaiting review).
 
 ---
 
@@ -266,9 +236,9 @@ The Git history of the repository records the following merged and unmerged pull
 The following acceptance checklist is organized according to the **Lab 8 Stage 6** testing criteria.
 
 > **Verification Notice:**  
-> All runtime tests currently remain **unverified `[ ]`**. While static code inspection confirms that the corresponding UI and ViewModel components are present in the repository, formal runtime execution on a device or emulator has not yet been conducted. Tests dependent on Room database persistence cannot be completed until Stage 5 is merged into `master`.
+> All runtime tests currently remain **unverified `[ ]`**. While static code inspection confirms that the corresponding UI, ViewModel, and Room database components are fully integrated in the repository, formal runtime execution on a device or emulator has not yet been conducted.
 
-### Part A: Functional & Navigation Verification (Implemented Features)
+### Part A: Functional & Navigation Verification
 - [ ] **1. User Registration & Login Flow:** Register a new user account, confirm automatic transition to the login screen with pre-filled email, and verify successful login.
 - [ ] **2. Initial Dashboard State:** Verify that upon first login, the dashboard accurately displays zero (`0`) tenants and zero rent.
 - [ ] **3. Tenant Creation:** Navigate to the Add Tenant screen, enter three distinct tenant records, and save each one.
@@ -279,7 +249,7 @@ The following acceptance checklist is organized according to the **Lab 8 Stage 6
 - [ ] **8. Navigation Controls:** Open and test every destination in the Navigation Drawer and verify top-level toolbar navigation.
 - [ ] **9. Logout Verification:** Select "Logout" from the options menu and confirm that the user session terminates and returns to the Login screen with the backstack cleared.
 
-### Part B: Persistence Verification (Blocked -- Pending Stage 5 Merge)
+### Part B: Persistence Verification
 - [ ] **10. Application Process Termination:** With tenant data entered, close the application completely and swipe it away from the Android Recent Apps overview.
 - [ ] **11. Permanent Data Retention:** Re-launch the application and log in; confirm that all previously entered tenant records remain intact and are loaded from the Room database.
 
@@ -290,22 +260,17 @@ The following acceptance checklist is organized according to the **Lab 8 Stage 6
 
 ## 12. Release and Distribution
 
-The official release process is scheduled under **Stage 6** upon the successful review and merging of Stage 5 into `master`.
+The official release process is scheduled under **Stage 6** upon the successful review and merging of Stage 5 and Stage 6 PR #7 into `master`.
 
-### Planned Release Procedure (Lab 8 Stage 6)
-1. **Branch Creation:** After Stage 5 has been merged into the default branch, pull the latest `master` branch and create the release branch `release/v1.0`.
-2. **Version Configuration:** Verify that `app/build.gradle.kts` specifies the release version codes inside `defaultConfig`:
+### Release Procedure (Lab 8 Stage 6)
+1. **Branch Creation & PR:** The release branch `release/v1.0` has been created and synced with `master`; Pull Request #7 is open and assigned to Project Lead (to be confirmed) for review.
+2. **Version Configuration:** Confirmed that `app/build.gradle.kts` specifies the release version codes inside `defaultConfig`:
    ```kotlin
    versionCode = 1
    versionName = "1.0"
    ```
-3. **Commit & Pull Request:** Commit final release documentation with the required commit message:
-   ```bash
-   git commit -m "Add README and set version 1.0."
-   ```
-   Open a pull request titled `Stage 6: Release v1.0` comparing `release/v1.0` against base `master`, assigned to Project Lead (to be confirmed) for review.
-4. **Signed APK Generation:** Following approval and merging into `master`, generate a signed release APK in Android Studio via **Build > Generate Signed App Bundle or APK... > APK**.
-5. **GitHub Release Publication:**
+3. **Signed APK Generation:** Following review and merging of PR #7 into `master`, switch to `master`, pull, and generate a signed release APK in Android Studio via **Build > Generate Signed App Bundle or APK... > APK**.
+4. **GitHub Release Publication:**
    - Create a new GitHub Release with tag `v1.0` and title `Tenant Management System v1.0`.
    - Attach the compiled binary `app/release/app-release.apk`.
    - Provide summary release notes and team contributor attributions.
