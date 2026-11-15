@@ -1,18 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
-    // Switch Safe Args on for this app[cite: 74]
+    // Switch Safe Args on for this app
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.devtools.ksp")
 }
 android {
     namespace = "com.example.tenantmanagementsystem2"
-    compileSdk {
-        version = release(37)
-        buildFeatures {
-            viewBinding = true
-            dataBinding = true
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.tenantmanagementsystem2"
@@ -24,11 +18,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        viewBinding = true
+        dataBinding = true
+    }
+
     buildTypes {
         release {
-            optimization {
-                enable = false
-            }
+            isMinifyEnabled = false
         }
     }
     compileOptions {
