@@ -4,7 +4,7 @@
 **Institution:** Strathmore University -- School of Computing and Engineering Sciences  
 **Repository:** [rtheuri/Tenant_Management-System-2](https://github.com/rtheuri/Tenant_Management-System-2)  
 **Default Branch:** `master`  
-**Current Status:** Stages 1-5 Merged; Stage 6 (Release & Documentation) In Progress (PR #7) — Debug build passing ✅
+**Current Status:** All Stages (1–6) Merged into `master` — Debug build passing ✅
 
 ---
 
@@ -18,7 +18,7 @@ The Tenant Management System is a native Android mobile application developed in
 - Stage 3 (Room Database): Completed and merged into `master` ([PR #6](https://github.com/rtheuri/Tenant_Management-System-2/pull/6)).
 - Stage 4 & 4B (Screens Integration): Completed and merged into `master` ([PR #2](https://github.com/rtheuri/Tenant_Management-System-2/pull/2) and [PR #4](https://github.com/rtheuri/Tenant_Management-System-2/pull/4)).
 - Stage 5 (Data Integration): Completed and merged into `master` ([PR #5](https://github.com/rtheuri/Tenant_Management-System-2/pull/5)).
-- Stage 6 (Release and Documentation): In progress (Pull Request #7 open, awaiting review and release build).
+- Stage 6 (Release and Documentation): Completed and merged into `master` ([PR #7](https://github.com/rtheuri/Tenant_Management-System-2/pull/7)).
 
 ---
 
@@ -194,11 +194,10 @@ The project group consists of exactly six members. Stage allocations have been c
 | Bradley Roche | 193711 | Stage 3: Room Database Setup | feature/room | PR #6 (Merged into `master`) |
 | Robert Theuri | 184904 | Stage 1: Lead & Architecture Setup | feature/stage1-architecture-setup | PR #3 (Merged into `master`) |
 | Emmanuel Kipruto | 183200 | Stage 5: Data Integration | feature/data-integration | PR #5 (Merged into `master`) |
-| Victoria Mumbi | 186643 | Stage 6: Release & Documentation (Confirmed) | release/v1.0 | PR #7 (Awaiting Review) |
+| Victoria Mumbi | 186643 | Stage 6: Release & Documentation (Confirmed) | release/v1.0 | PR #7 (Merged into `master`) |
 | Aliya Farah | 191254 | Stage 4A: Screens – Dashboard & ViewModel Connection | feature/screens | PR #2 (Merged into `master`) |
 | Zukeina Hassan | 191628 | Stage 4B: Screens – Add & View Tenants | feature/screens | PR #4 (Merged into `master`) |
-
-> **Note on Stage 2 (ViewModel Logic):** The ViewModel feature branch (`view-model`) and PR #1 (`Add TenantViewModel`) were authored by GitHub user `Alviskamau`. This GitHub username does not map directly to a named team member in the confirmed list above. If `Alviskamau` is a team member's alternate account or a collaborator, the team lead should confirm this attribution. The ViewModel work in PR #1 is credited to `Alviskamau` in the repository history.
+| Alvis Kamau | To be confirmed | Stage 2: ViewModel Logic | view-model | PR #1 (Merged into `master`) |
 
 ### Repository Pull Request History
 The Git history of the repository records the following merged and active pull requests. These account usernames represent repository activity and are not equated with individual student identities without team confirmation:
@@ -208,7 +207,7 @@ The Git history of the repository records the following merged and active pull r
 - Pull Request #4: `Stage 4B: connect AddTenant and ViewTenants fragments to TenantViewModel` (Merged into `master`, authored and merged by GitHub user `zukena`).
 - Pull Request #5: `Implement Room database integration for Tenant data persistence` (Merged into `master`, authored on branch `feature/data-integration` by GitHub user `Kippy330`).
 - Pull Request #6: `Add Room entity, DAO and database` (Merged into `master`, authored on branch `feature/room`).
-- Pull Request #7: `Stage 6: Release v1.0` (Active on branch `release/v1.0`, authored by `Vmumbi`, awaiting review).
+- Pull Request #7: `Stage 6: Release v1.0` (Merged into `master` from `release/v1.0`, authored by `Vmumbi`).
 
 ---
 
