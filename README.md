@@ -87,7 +87,7 @@ Manual tracking of tenants using paper files or generic spreadsheets often cause
 The technology stack is based on the verified build configuration files (`build.gradle.kts` and `gradle/libs.versions.toml`):
 
 - **Programming Language:** Kotlin
-- **Build System:** Gradle (Wrapper version `9.6.0`, Android Gradle Plugin `9.5.1`)
+- **Build System:** Gradle (Wrapper version `9.6.0`, Android Gradle Plugin `9.3.3`)
 - **Compile SDK:** 37
 - **Target SDK:** 37
 - **Minimum SDK:** 24 (Android 7.0 Nougat)
