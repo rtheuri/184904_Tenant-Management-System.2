@@ -1,7 +1,7 @@
 package com.example.tenantmanagementsystem2.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.tenantmanagementsystem2.TenantDao
+import com.example.tenantmanagementsystem2.data.local.TenantDao
 import com.example.tenantmanagementsystem2.data.model.Tenant
 
 class TenantRepository(private val tenantDao: TenantDao) {
