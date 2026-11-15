@@ -33,11 +33,8 @@ class ViewTenantsFragment : Fragment() {
 
         // The tenant sent from Add Tenant, or null if we came from the Dashboard
         val newTenant = args.newTenant
-
-        // Data Binding: give it to the layout variable so it updates itself
         binding.tenant = newTenant
 
-        // Hide the "Just added" section if no tenant was passed
         if (newTenant == null) {
             binding.newTenantGroup.visibility = View.GONE
         }
