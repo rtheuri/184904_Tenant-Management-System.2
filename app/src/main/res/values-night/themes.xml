@@ -1,20 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme for Dark mode. -->
+    <!-- Base application theme. -->
     <style name="Base.Theme.TenantManagementSystem2" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">#93C5FD</item>
-        <item name="colorOnPrimary">#1E3A8A</item>
-        <item name="colorPrimaryContainer">#1E40AF</item>
-        <item name="colorOnPrimaryContainer">#DBEAFE</item>
-
-        <item name="colorSecondary">#5EEAD4</item>
-        <item name="colorOnSecondary">#134E4A</item>
-
-        <item name="android:colorBackground">#0F172A</item>
-        <item name="colorSurface">#1E293B</item>
-        <item name="colorOnSurface">#F8FAFC</item>
-        <item name="colorOutline">#475569</item>
-
-        <item name="android:statusBarColor">#0F172A</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
 </resources>
