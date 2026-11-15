@@ -34,6 +34,9 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("TENANT_LIFECYCLE", " DashboardFragment: onViewCreated")
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
         viewModel.tenants.observe(viewLifecycleOwner) { tenantList ->
             binding.tenantCountTextView.text = "Tenants\n${tenantList.size}"
         }
